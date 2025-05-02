@@ -7,7 +7,11 @@ import pandas as pd
 import polars as pl
 
 CWD = os.getcwd()
-PATH_INPUT_FOLDER = os.path.join(CWD, "input2")
+PATH_INPUT_FOLDER = os.path.join(CWD, "input")
+
+# The official page of the New York City: Taxi and Limousine Commision
+# where you can download the data is:
+# https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page
 
 FILES_TO_DOWNLOAD = [
     
@@ -82,6 +86,7 @@ if __name__ == "__main__":
     # es mejor dejar el código
     # sin el get_context
     # mp.Pool(processes = cpu_cores)
+
     pool = mp.Pool(processes = cpu_cores)
     pool.map(func = download_file, iterable = iterable)
     pool.close()
