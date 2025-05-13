@@ -4,5 +4,6 @@
 *.__pycache__
 *.DS_Store
 *.mp4
+*.zip
 env_polanyt/*
 Misc Polars.ipynb
