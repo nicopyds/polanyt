@@ -3,20 +3,26 @@ from urllib.request import urlretrieve
 
 import multiprocessing as mp
 
-import pandas as pd
-import polars as pl
 
 CWD = os.getcwd()
 PATH_INPUT_FOLDER = os.path.join(CWD, "input")
 
 # The official page of the New York City: Taxi and Limousine Commision
 # where you can download the data is:
-# https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page
+# https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page
 
 FILES_TO_DOWNLOAD = [
     "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2025-01.parquet",
     "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2025-02.parquet",
-
+    "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2025-03.parquet",
+    "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2025-04.parquet",
+    "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2025-05.parquet",
+    "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2025-06.parquet",
+    "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2025-07.parquet",
+    "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2025-08.parquet",
+    "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2025-09.parquet",
+    "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2025-10.parquet",
+    "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2025-11.parquet",
     "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-01.parquet",
     "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-02.parquet",
     "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-03.parquet",
@@ -29,7 +35,6 @@ FILES_TO_DOWNLOAD = [
     "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-10.parquet",
     "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-11.parquet",
     "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-12.parquet",
-   
     "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2023-01.parquet",
     "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2023-02.parquet",
     "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2023-03.parquet",
@@ -42,7 +47,6 @@ FILES_TO_DOWNLOAD = [
     "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2023-10.parquet",
     "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2023-11.parquet",
     "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2023-12.parquet",
-    
     "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2022-01.parquet",
     "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2022-02.parquet",
     "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2022-03.parquet",
@@ -55,7 +59,6 @@ FILES_TO_DOWNLOAD = [
     "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2022-10.parquet",
     "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2022-11.parquet",
     "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2022-12.parquet",
-    
     "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2021-01.parquet",
     "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2021-02.parquet",
     "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2021-03.parquet",
@@ -68,37 +71,38 @@ FILES_TO_DOWNLOAD = [
     "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2021-10.parquet",
     "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2021-11.parquet",
     "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2021-12.parquet",
-    
 ]
 
+
 def make_input_folder(folder_path):
-    
     if not os.path.isdir(folder_path):
         os.makedirs(folder_path)
 
+
 def extract_basename(url):
-    
     return os.path.basename(url)
 
-def download_file(t):
-    
-    folder_path, url = t
-    basename = os.path.join(folder_path, extract_basename(url = url))
-    
-    urlretrieve(url = url, filename = basename)
 
-iterable = list(zip([PATH_INPUT_FOLDER for i in range(len(FILES_TO_DOWNLOAD))], FILES_TO_DOWNLOAD))
+def download_file(t):
+    folder_path, url = t
+    basename = os.path.join(folder_path, extract_basename(url=url))
+
+    urlretrieve(url=url, filename=basename)
+
+
+iterable = list(
+    zip([PATH_INPUT_FOLDER for i in range(len(FILES_TO_DOWNLOAD))], FILES_TO_DOWNLOAD)
+)
 cpu_cores = mp.cpu_count() - 2
 
-make_input_folder(folder_path = PATH_INPUT_FOLDER)
+make_input_folder(folder_path=PATH_INPUT_FOLDER)
 
 if __name__ == "__main__":
-
     # para aquellos que usan Windows
     # es mejor dejar el código
     # sin el get_context
     # mp.Pool(processes = cpu_cores)
 
-    pool = mp.Pool(processes = cpu_cores)
-    pool.map(func = download_file, iterable = iterable)
+    pool = mp.Pool(processes=cpu_cores)
+    pool.map(func=download_file, iterable=iterable)
     pool.close()
